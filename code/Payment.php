@@ -21,13 +21,15 @@ class Payment extends DataObject {
 	 *   - Incomplete: Payment cancelled
 	 * Amount: The payment amount amd currency
 	 * HTTPStatus: Status code of the HTTP response
+	 * TxnID: An identify we give to the payment gateway to identify a transaction
 	 */
 	private static $db = array(
 		'Method' => 'Varchar(100)',
 		'Status' => "Enum('Incomplete, Success, Failure, Pending')",
 		'Amount' => 'Money',
 		'HTTPStatus' => 'Varchar(10)',
-		'Reference' => 'Varchar'
+		'Reference' => 'Varchar',
+		'TxnID' => 'Varchar(15)'
 	);
 
 	/**
