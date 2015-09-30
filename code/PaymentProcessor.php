@@ -271,6 +271,15 @@ class PaymentProcessor_GatewayHosted extends PaymentProcessor {
 		// Send a request to the gateway
 		$result = $this->gateway->process($this->paymentData);
 
+		if (method_exists(get_class($this->gateway), 'getTxnID')) {
+			$txnID = $this->gateway->getTxnID();
+
+			if (!is_null($txnID)) {
+				$this->payment->TxnID = $txnID;
+				$this->payment->write();
+			}
+		}
+
 		// Processing may not get to here if all goes smoothly, customer will be at the 3rd party gateway
 		if ($result && !$result->isSuccess()) {
 
