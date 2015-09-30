@@ -21,7 +21,7 @@ class Payment extends DataObject {
 	 *   - Incomplete: Payment cancelled
 	 * Amount: The payment amount amd currency
 	 * HTTPStatus: Status code of the HTTP response
-	 * TxnID: An identify we give to the payment gateway to identify a transaction
+	 * TxnID: An identifier we give to the payment gateway to identify a transaction
 	 */
 	private static $db = array(
 		'Method' => 'Varchar(100)',
