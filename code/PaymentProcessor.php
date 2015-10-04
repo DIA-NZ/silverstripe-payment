@@ -313,18 +313,22 @@ class PaymentProcessor_GatewayHosted extends PaymentProcessor {
 		// Query the gateway for the payment result
 		$result = $this->gateway->check($request);
 
-		if (method_exists($this->gateway, 'getTxnID')) {
-			$txnID = $this->gateway->getTxnID();
-
-			if ($this->payment->TxnID !== $txnID) {
-				$result = new PaymentGateway_Failure();
-			}
+		if (!$this->paymentTxnIDMatchesGatewayTxnID()) {
+			$result = new PaymentGateway_Failure();
 		}
 
 		$this->payment->updateStatus($result);
 
 		// Do redirection
 		$this->doRedirect();
+	}
+
+	private function paymentTxnIDMatchesGatewayTxnID() {
+		if (method_exists($this->gateway, 'getTxnID')) {
+			return ($this->payment->TxnID === $this->gateway->getTxnID());
+		} else {
+			return true; // always return true if the gateway doesn't support getting the TxnID
+		}
 	}
 	
 	/**
