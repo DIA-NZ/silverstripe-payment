@@ -306,11 +306,6 @@ class PaymentProcessor_GatewayHosted extends PaymentProcessor {
 		// Reconstruct the payment object
 		$this->payment = Payment::get()->byID($request->param('OtherID'));
 
-		if ($this->payment->Status !== Payment::PENDING) {
-			// only process payments that are pending
-			$this->payment = null;
-		}
-
 		// Reconstruct the gateway object
 		$methodName = $request->param('ID');
 		$this->gateway = PaymentFactory::get_gateway($methodName);
