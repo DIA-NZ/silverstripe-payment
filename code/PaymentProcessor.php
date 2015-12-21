@@ -315,7 +315,6 @@ class PaymentProcessor_GatewayHosted extends PaymentProcessor {
 		}
 
 		Debug::dump($this->payment);
-		die();
 
 		// Reconstruct the gateway object
 		$methodName = $request->param('ID');
@@ -324,13 +323,20 @@ class PaymentProcessor_GatewayHosted extends PaymentProcessor {
 		// Query the gateway for the payment result
 		$result = $this->gateway->check($request);
 
+		Debug::dump($this->payment);
+
 		if (!$this->paymentTxnIDMatchesGatewayTxnID()) {
 			$result = new PaymentGateway_Failure();
 		}
 
+		Debug::dump($this->payment);
+
 		if (!is_null($this->payment)) {
 			$this->payment->updateStatus($result);
 		}
+
+		Debug::dump($this->payment);
+		die();
 
 		// Do redirection
 		$this->doRedirect();
