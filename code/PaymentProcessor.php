@@ -87,8 +87,6 @@ class PaymentProcessor extends Controller {
 	 */
 	public function doRedirect() {
 		// Put the payment ID in a session
-		Debug::dump('Payment ID:' . $this->payment->ID);
-		die();
 		Session::set('PaymentID', $this->payment->ID);
 		$this->extend('onBeforeRedirect');
 		Controller::curr()->redirect($this->getRedirectURL());
