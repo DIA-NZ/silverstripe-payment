@@ -6,7 +6,7 @@
  * Override this class if desired to add custom functionalities.
  */
 class PaymentProcessor extends Controller {
-	
+
 	/**
 	 * The method name of this controller
 	 *
@@ -87,6 +87,8 @@ class PaymentProcessor extends Controller {
 	 */
 	public function doRedirect() {
 		// Put the payment ID in a session
+		Debug::dump('Payment ID:' . $this->payment->ID);
+		die();
 		Session::set('PaymentID', $this->payment->ID);
 		$this->extend('onBeforeRedirect');
 		Controller::curr()->redirect($this->getRedirectURL());
@@ -108,7 +110,7 @@ class PaymentProcessor extends Controller {
 	 * Process a payment request. To be extended by individual processor type
 	 * If there's no break point (i.e exceptions and errors), this should
 	 * redirect to the postRedirectURL (merchant-hosted) or the external gateway (gateway-hosted)
-	 * 
+	 *
 	 * Data passed in the format (Reference is optional)
 	 * array('Amount' => 1.00, 'Currency' => 'USD', 'Reference' => 'Ref')
 	 *
@@ -180,7 +182,7 @@ class PaymentProcessor_MerchantHosted extends PaymentProcessor {
 
 	/**
 	 * Return the form fields for credit data
-	 * 
+	 *
 	 * @return FieldList
 	 */
 	public function getCreditCardFields() {
@@ -202,7 +204,7 @@ class PaymentProcessor_MerchantHosted extends PaymentProcessor {
 
 	/**
 	 * Override to add credit card form fields
-	 * 
+	 *
 	 * @return FieldList
 	 */
 	public function getFormFields() {
@@ -259,7 +261,7 @@ class PaymentProcessor_GatewayHosted extends PaymentProcessor {
 				$this->methodName,
 				$this->payment->ID
 		));
-		
+
 		// Set the cancel link
 		$this->gateway->cancelURL = Director::absoluteURL(Controller::join_links(
 				$this->link(),
@@ -295,9 +297,9 @@ class PaymentProcessor_GatewayHosted extends PaymentProcessor {
 	}
 
 	/**
-	 * Process request from the external gateway, this action is usually triggered if the payment was completed on the gateway 
+	 * Process request from the external gateway, this action is usually triggered if the payment was completed on the gateway
 	 * and the user was redirected to the returnURL.
-	 * 
+	 *
 	 * The request is passed to the gateway so that it can process the request and use a mechanism to check the status of the payment.
 	 *
 	 * @param SS_HTTPResponse $request
@@ -337,11 +339,11 @@ class PaymentProcessor_GatewayHosted extends PaymentProcessor {
 			return true; // always return true if the gateway doesn't support getting the TxnID
 		}
 	}
-	
+
 	/**
 	 * Process request from the external gateway, this action is usually triggered if the payment was cancelled
 	 * and the user was redirected to the cancelURL.
-	 * 
+	 *
 	 * @param SS_HTTPResponse $request
 	 */
 	public function cancel($request) {
