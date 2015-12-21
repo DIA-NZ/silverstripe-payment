@@ -308,12 +308,14 @@ class PaymentProcessor_GatewayHosted extends PaymentProcessor {
 
 		Debug::dump($this->payment);
 		Debug::dump($this->payment->toMap());
-		die();
 
 		if ($this->payment->Status !== Payment::PENDING) {
 			// only process payments that are pending
 			$this->payment = null;
 		}
+
+		Debug::dump($this->payment);
+		die();
 
 		// Reconstruct the gateway object
 		$methodName = $request->param('ID');
