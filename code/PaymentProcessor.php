@@ -306,6 +306,10 @@ class PaymentProcessor_GatewayHosted extends PaymentProcessor {
 		// Reconstruct the payment object
 		$this->payment = Payment::get()->byID($request->param('OtherID'));
 
+		Debug::dump($this->payment);
+		Debug::dump($this->payment->toMap());
+		die();
+
 		if ($this->payment->Status !== Payment::PENDING) {
 			// only process payments that are pending
 			$this->payment = null;
