@@ -306,16 +306,6 @@ class PaymentProcessor_GatewayHosted extends PaymentProcessor {
 		// Reconstruct the payment object
 		$this->payment = Payment::get()->byID($request->param('OtherID'));
 
-		Debug::dump($this->payment);
-		Debug::dump($this->payment->toMap());
-
-		if ($this->payment->Status !== Payment::PENDING) {
-			// only process payments that are pending
-			$this->payment = null;
-		}
-
-		Debug::dump($this->payment);
-
 		// Reconstruct the gateway object
 		$methodName = $request->param('ID');
 		$this->gateway = PaymentFactory::get_gateway($methodName);
@@ -323,20 +313,13 @@ class PaymentProcessor_GatewayHosted extends PaymentProcessor {
 		// Query the gateway for the payment result
 		$result = $this->gateway->check($request);
 
-		Debug::dump($this->payment);
-
 		if (!$this->paymentTxnIDMatchesGatewayTxnID()) {
 			$result = new PaymentGateway_Failure();
 		}
 
-		Debug::dump($this->payment);
-
 		if (!is_null($this->payment)) {
 			$this->payment->updateStatus($result);
 		}
-
-		Debug::dump($this->payment);
-		die();
 
 		// Do redirection
 		$this->doRedirect();
